@@ -25,6 +25,12 @@ setup(
     install_requires = [
         'plover>=4.0.0.dev0',
     ],
+    setup_requires = [
+        'setuptools-scm',
+    ],
+    tests_require = [
+        'mock',
+    ],
     py_modules = [
         'plover_italian_stentura',
     ],
