@@ -4,12 +4,12 @@ from setuptools import setup
 
 
 setup(
-    name = 'Plover: Italian Stentura',
+    name = 'plover_italian_stentura',
     version = '0.5.1',
     description = 'Italian Stentura support for Plover',
     author = 'Benoit Pierre',
     author_email = 'benoit.pierre@gmail.com',
-    license =  'GNU General Public License v2 or later (GPLv2+)',
+    license = 'GNU General Public License v2 or later (GPLv2+)',
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Plugins',
