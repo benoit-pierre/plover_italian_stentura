@@ -47,29 +47,20 @@ class ItalianStentura(plover.machine.base.SerialStenotypeBase):
         plover.machine.base.SerialStenotypeBase.__init__(self, params)
 
     def run(self):
-        settings = self.serial_port.getSettingsDict()
-        self.serial_port.applySettingsDict(settings)
         self._ready()
         while not self.finished.isSet():
-
             raw = self.serial_port.read(4)
             if not raw:
                 continue
-
             log.debug('raw: %s', binascii.hexlify(raw))
-
             if len(raw) != 4:
                 continue
-
             keys = _decode(raw)
             log.debug('keys: %r', keys)
             if not keys:
                 continue
-
             steno_keys = self.keymap.keys_to_actions(keys)
             log.debug('steno keys: %r', steno_keys)
             if not steno_keys:
                 continue
-
             self._notify(steno_keys)
-
