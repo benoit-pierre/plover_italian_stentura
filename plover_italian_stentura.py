@@ -19,15 +19,11 @@ def _decode(raw):
     mask = struct.unpack('<I', raw)[0]
     if (mask & 1) == 0:
         return []
-    for n in range(len(STENO_KEY_CHART)):
-        if mask == 0:
-            break
-        bitmask = 1 << n
-        if (mask & bitmask) != 0:
-            key = STENO_KEY_CHART[n]
-            if key is not None:
-                stroke.append(key)
-            mask &= ~bitmask
+    for n, key in enumerate(STENO_KEY_CHART):
+        if key is None:
+            continue
+        if (mask & (1 << n)) != 0:
+            stroke.append(key)
     return stroke
 
 
