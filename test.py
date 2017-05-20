@@ -89,3 +89,7 @@ class ItalianStenturaTest(unittest.TestCase):
             machine.start_capture()
             machine.finished.wait()
         self.assertFalse(bool(expected))
+
+
+if __name__ == '__main__':
+    unittest.main()
