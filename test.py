@@ -73,11 +73,14 @@ class ItalianStenturaTest(unittest.TestCase):
             'a'   : '-D',
             'o'   : '-Z',
         }
+        serial_params = {
+            name: value[0]
+            for name, value in ItalianStentura.get_option_info().items()
+        }
         keymap = Keymap(ItalianStentura.KEYS_LAYOUT.split(), keymap_mappings.keys())
         keymap.set_mappings(keymap_mappings)
         with patch('plover.machine.base.serial.Serial', MockSerial) as mock:
-            params = dict(ItalianStentura.get_option_info().items())
-            machine = ItalianStentura(params)
+            machine = ItalianStentura(serial_params)
             def stroke_callbak(steno_keys):
                 self.assertEqual(''.join(steno_keys), expected.pop(0))
                 if not expected:
