@@ -28,7 +28,7 @@ class MockSerial(object):
     def read(self, size=1):
         assert self._opened
         data = self.inputs.pop(0)
-        assert len(data) == size
+        assert len(data) <= size
         return data
 
 
@@ -37,14 +37,29 @@ class ItalianStenturaTest(unittest.TestCase):
     def test_decoding(self):
         inputs = [binascii.unhexlify(packet)
                   for packet in '''
-                  A9002000
+                  A90020
+                  00
+
                   05464000
-                  A9040400
+
+                  A904
+                  0400
+
                   0D065000
+
                   A1008000
-                  05820400
-                  17008000
-                  05080000
+
+                  05
+                  820400
+
+                  17
+                  00
+                  8000
+
+                  05
+                  08
+                  00
+                  00
                   '''.split()]
         # Mi piace mangiare la pizza.
         expected = 'CHRi/PIAce/CHRAh/PCIAre/HRa/PIsh/SPTa/P*'.split('/')

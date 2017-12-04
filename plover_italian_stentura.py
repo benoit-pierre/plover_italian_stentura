@@ -1,9 +1,7 @@
 
 import struct
-import binascii
 
-import plover.machine.base
-from plover import log
+from plover.machine.base import SerialStenotypeBase
 
 
 STENO_KEY_CHART = (
@@ -14,9 +12,9 @@ STENO_KEY_CHART = (
 )
 
 
-def _decode(raw):
+def _decode(packet):
     stroke = []
-    mask = struct.unpack('<I', raw)[0]
+    mask = struct.unpack('<I', packet)[0]
     if (mask & 1) == 0:
         return []
     for n, key in enumerate(STENO_KEY_CHART):
@@ -27,7 +25,7 @@ def _decode(raw):
     return stroke
 
 
-class ItalianStentura(plover.machine.base.SerialStenotypeBase):
+class ItalianStentura(SerialStenotypeBase):
 
     KEYMAP_MACHINE_TYPE = 'Stentura'
 
@@ -39,24 +37,9 @@ class ItalianStentura(plover.machine.base.SerialStenotypeBase):
         ^
     '''
 
-    def __init__(self, params):
-        plover.machine.base.SerialStenotypeBase.__init__(self, params)
-
     def run(self):
         self._ready()
-        while not self.finished.isSet():
-            raw = self.serial_port.read(4)
-            if not raw:
-                continue
-            log.debug('raw: %s', binascii.hexlify(raw))
-            if len(raw) != 4:
-                continue
-            keys = _decode(raw)
-            log.debug('keys: %r', keys)
-            if not keys:
-                continue
-            steno_keys = self.keymap.keys_to_actions(keys)
-            log.debug('steno keys: %r', steno_keys)
-            if not steno_keys:
-                continue
-            self._notify(steno_keys)
+        for packet in self._iter_packets(4):
+            steno_keys = self.keymap.keys_to_actions(_decode(packet))
+            if steno_keys:
+                self._notify(steno_keys)
