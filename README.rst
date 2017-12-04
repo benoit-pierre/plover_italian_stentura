@@ -8,7 +8,7 @@ protocol than the standard Stentura.
 Release history
 ---------------
 
-in development
-~~~~~~~~~~~~~~
+0.5.6
+~~~~~
 
 * fix possible invalid strokes due to incorrect handling of read timeouts
